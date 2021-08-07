@@ -1,0 +1,6 @@
+main: fr.opoc.duel.DuelPlugin
+name: Duel
+version: 1.0
+author: Opoc
+commands:
+  duel:
