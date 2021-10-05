@@ -5,19 +5,16 @@ import fr.opoc.duel.files.ArenaFile;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-import java.util.List;
+
 
 public class ArenaManager {
 
     private DuelPlugin plugin;
-    ArenaFile arenaFile;
-    ArenaFile af;
     private ArrayList<Arena> arenas = new ArrayList<>();
 
     public ArenaManager(DuelPlugin plugin) {
         this.plugin=plugin;
-        //this.arenaFile = plugin.getArenaFile();
-        this.af = plugin.getArenaFile();
+
     }
 
     public void addArena(String name){
@@ -30,6 +27,10 @@ public class ArenaManager {
         if (nextArena!=null){
             nextArena.getPlayers().add(firstPlayer);
             nextArena.getPlayers().add(secondPlayer);
+            firstPlayer.teleport(nextArena.getFirstLocation());
+            secondPlayer.teleport(nextArena.getSecondLocation());
+            nextArena.setState(ArenaState.COUNTDOWN);
+            nextArena.startCountdown();
         }
         else {
             firstPlayer.sendMessage("il n'y a pas d'arene disponible.");
@@ -37,17 +38,29 @@ public class ArenaManager {
         }
     }
 
-    private Arena getNextArena(){
+    public Arena getNextArena(){
         for (Arena arena : arenas){
-            if (!arena.isStarted()){
+            ArenaFile arenaFile = plugin.getArenaFile();
+            if (arena.isAvailable()){
+
                 return arena;
             }
-
         }
         return null;
     }
     public ArrayList<Arena> getArena(){
         return arenas;
+    }
+
+
+    public Arena getArena(Player player) {
+        for (Arena arena : arenas){
+            if (arena.getPlayers().contains(player)){
+                return arena;
+            }
+
+        }
+        return null;
     }
 
     public void loadArenas(){

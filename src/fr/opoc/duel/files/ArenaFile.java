@@ -25,7 +25,6 @@ public class ArenaFile {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            //this.plugin.saveResource("Arenas.old", false);
         }
         this.arenaconfig = new YamlConfiguration();
         try {
